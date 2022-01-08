@@ -38,7 +38,7 @@ while True:
 
             response = requests.get(current_track['item']['album']['images'][0]['url'])
             time.sleep(1)
-            album_blur = generate_final_cover(response.content, "album.jpeg")
+            generate_final_cover(response.content, "album.jpeg")
 
     except TypeError:
         with open("playing.txt", "w", encoding='utf8') as song:

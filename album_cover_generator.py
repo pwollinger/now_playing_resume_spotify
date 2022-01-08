@@ -1,8 +1,7 @@
 import io
-import PIL
 from PIL import ImageFilter, Image
 
-def generate_final_cover(cover, coverFilename):
+def generate_final_cover(cover, cover_filename):
 
     cover = Image.open(io.BytesIO(cover))
 
@@ -19,4 +18,4 @@ def generate_final_cover(cover, coverFilename):
     final_cover.paste(strp1, (0,0))
     final_cover.paste(cover_resized, (cutpoints[0],0))
     final_cover.paste(strp2, (cutpoints[1][0],0))
-    final_cover.save(coverFilename)
+    final_cover.save(cover_filename)
