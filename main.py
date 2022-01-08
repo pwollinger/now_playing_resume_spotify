@@ -5,7 +5,6 @@ import time
 import spotipy
 import requests
 import configparser
-import numpy as np
 from PIL import ImageFilter, Image
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -52,23 +51,18 @@ while True:
 
 def finalImage(coverFilename):
     with Image.open(coverFilename) as cover:
-        newSize = (int(np.round(cover.size[0]/cover.size[1]*1080)), 1080)
+        newSize = (int(round(cover.size[0]/cover.size[1]*1080)), 1080)
         coverResized = cover.resize(newSize)
         blurredCover = coverResized.filter(ImageFilter.GaussianBlur(6))
 
-        arrCoverResized = np.asarray(coverResized)
-        arrBlurredCover = np.asarray(blurredCover)
-        arrFinalCover = np.asarray(Image.new(cover.mode, (1920, 1080)))
-
         remainder = 1920 - newSize[0]
-        if remainder % 2 == 0:
-            cutpoints = (remainder//2, -remainder//2)
-        else:
-            cutpoints = (remainder//2, -remainder//2 - 1)
+        cutpoints = (remainder//2,
+                    (1920 - remainder//2, blurredCover.size[0] - remainder%2 - remainder//2))
+        strp1 = blurredCover.crop((0, 0, cutpoints[0], 1080))
+        strp2 = blurredCover.crop((cutpoints[1][1], 0, blurredCover.size[0], 1080))
 
-        arrFinalCover[:,:cutpoints[0]] = arrBlurredCover[:,:cutpoints[0]]
-        arrFinalCover[:, cutpoints[0]:cutpoints[1]] = arrCoverResized
-        arrFinalCover[:,cutpoints[1]:] = arrBlurredCover[:,cutpoints[1]:]
-
-        finalCover = Image.fromarray(arrFinalCover)
+        finalCover = Image.new(cover.mode, (1920, 1080))
+        finalCover.paste(strp1, (0,0))
+        finalCover.paste(coverResized, (cutpoints[0],0))
+        finalCover.paste(strp2, (cutpoints[1][0],0))
         finalCover.save('album_blur.png')
