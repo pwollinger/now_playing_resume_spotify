@@ -9,7 +9,7 @@ from PIL import ImageFilter, Image
 from spotipy.oauth2 import SpotifyOAuth
 
 config = configparser.ConfigParser()
-config.read('spotify_music_duration/config.ini')
+config.read('config.ini')
 
 os.environ["SPOTIPY_CLIENT_ID"] = config['Credentials']['ClientID']
 os.environ["SPOTIPY_CLIENT_SECRET"] = config['Credentials']['Secret']
