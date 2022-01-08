@@ -9,7 +9,7 @@ from PIL import ImageFilter, Image
 from spotipy.oauth2 import SpotifyOAuth
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('spotify_music_duration/config.ini')
 
 os.environ["SPOTIPY_CLIENT_ID"] = config['Credentials']['ClientID']
 os.environ["SPOTIPY_CLIENT_SECRET"] = config['Credentials']['Secret']
@@ -21,12 +21,12 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyOAuth(scope=scope))
 track_name = 'none'
 
 while True:
-    curret_track = sp.current_user_playing_track()
+    current_track = sp.current_user_playing_track()
     try:
-        if(track_name != curret_track['item']['name']):
-            track_name = curret_track['item']['name']
-            album_name = curret_track['item']['album']['name']
-            artist_name = curret_track['item']['artists'][0]['name']
+        if(track_name != current_track['item']['name']):
+            track_name = current_track['item']['name']
+            album_name = current_track['item']['album']['name']
+            artist_name = current_track['item']['artists'][0]['name']
             track_name_regex = re.findall("^(.*?) -", track_name)
             with open("playing.txt", "w", encoding='utf8') as song:
                 
@@ -37,7 +37,7 @@ while True:
                     song.write(f"{track_name} - {artist_name}") #\n{album_name}")
                     print(f"Listening: {artist_name} - {track_name}")
 
-            response = requests.get(curret_track['item']['album']['images'][0]['url'])
+            response = requests.get(current_track['item']['album']['images'][0]['url'])
 
             with open("album.png", "wb") as album:
                 album.write(response.content)
