@@ -4,8 +4,8 @@ import time
 import spotipy
 import requests
 import configparser
-from album_cover_generator import finalImage
 from spotipy.oauth2 import SpotifyOAuth
+from album_cover_generator import generate_final_cover
 
 config = configparser.ConfigParser()
 config.read('config.ini')
