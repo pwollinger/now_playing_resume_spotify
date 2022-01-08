@@ -39,8 +39,6 @@ while True:
 
             response = requests.get(current_track['item']['album']['images'][0]['url'])
             album_blur = finalImage("album.png")
-            with open("album_blur.png", "wb") as album:
-                album.write(response.content)
 
     except TypeError:
         with open("playing.txt", "w", encoding='utf8') as song:
