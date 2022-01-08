@@ -25,16 +25,16 @@ while True:
     try:
         if(track_name != current_track['item']['name']):
             track_name = current_track['item']['name']
-            album_name = current_track['item']['album']['name']
+            #album_name = current_track['item']['album']['name']
             artist_name = current_track['item']['artists'][0]['name']
             track_name_regex = re.findall("^(.*?) -", track_name)
             with open("playing.txt", "w", encoding='utf8') as song:
                 
                 if len(track_name_regex) > 0:
-                    song.write(f"{track_name_regex[0]} - {artist_name}") #\n{album_name}")
+                    song.write(f"{track_name_regex[0]} - {artist_name}")
                     print(f"Listening: {artist_name} - {track_name_regex[0]}")
                 else:
-                    song.write(f"{track_name} - {artist_name}") #\n{album_name}")
+                    song.write(f"{track_name} - {artist_name}")
                     print(f"Listening: {artist_name} - {track_name}")
 
             response = requests.get(current_track['item']['album']['images'][0]['url'])
@@ -50,4 +50,5 @@ while True:
         with open("playing.txt", "w", encoding='utf8') as song:
             song.write(f"")
  
-    time.sleep(2)
+    song_duration = (current_track['item']['duration_ms'] - current_track['progress_ms'])/1000
+    time.sleep(song_duration)
